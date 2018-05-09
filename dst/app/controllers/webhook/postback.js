@@ -121,8 +121,16 @@ function pushTransactionDetails(userId, orderNumber) {
             identifier: { $in: transactionResult.ownershipInfos.map((o) => o.identifier) }
         }).exec().then((docs) => docs.map((doc) => doc.toObject()));
         debug(ownershipInfos.length, 'ownershipInfos found.');
-        const ownershipInfosStr = ownershipInfos.map((i) => {
-            return util.format('💲%s\n%s %s\n@%s\n~%s', i.identifier, (i.typeOfGood.reservedTicket.ticketedSeat !== undefined) ? i.typeOfGood.reservedTicket.ticketedSeat.seatNumber : '', 'ticketName', i.typeOfGood.reservationStatus, moment(i.ownedThrough).format('YYYY-MM-DD HH:mm:ss'));
+        const ownershipInfosStr = ownershipInfos.map((info) => {
+            const offer = info.typeOfGood;
+            const ticket = offer.reservedTicket;
+            const ticketedSeat = ticket.ticketedSeat;
+            const ticketedMenuItem = ticket.ticketedMenuItem;
+            return util.format('●%s\n￥%s\n%s x%s\n%s\n~%s', info.identifier, ticket.totalPrice, (ticketedSeat !== undefined) ? ticketedSeat.seatNumber :
+                (ticketedMenuItem !== undefined) ? ticketedMenuItem.name :
+                    '', (offer.numSeats !== undefined) ? offer.numSeats :
+                (offer.numMenuItems !== undefined) ? offer.numMenuItems :
+                    '1', offer.reservationStatus, moment(info.ownedThrough).format('YYYY-MM-DD HH:mm:ss'));
         }).join('\n');
         const report = kwskfs.service.transaction.placeOrder.transaction2report(transaction);
         debug('report:', report);
