@@ -8,7 +8,7 @@ request.post(
             events: [
                 {
                     message: {
-                        text: '取引照'
+                        text: '取引照会'
                     },
                     replyToken: '26d0dd0923a94583871ecd7e6efec8e2',
                     source: {

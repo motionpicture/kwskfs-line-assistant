@@ -147,7 +147,7 @@ async function pushTransactionDetails(userId: string, orderNumber: string) {
 
     // タスクの実行日時を調べる
     const taskStrs = tasks.map((task) => {
-        let taskNameStr = '???';
+        let taskNameStr: string = task.name;
         switch (task.name) {
             case kwskfs.factory.taskName.PayPecorino:
                 taskNameStr = '口座支払';
@@ -279,8 +279,9 @@ ${actionStrs}
 ----------------------------
 ${ownershipInfosStr}
 `,
-    `----------------------------
-販売者情報-${order.orderNumber}
+    `${order.orderNumber}
+----------------------------
+販売者情報
 ----------------------------
 ${transaction.seller.typeOf}
 ${transaction.seller.id}
@@ -294,17 +295,22 @@ ${report.customer.telephone}
 ${report.customer.email}
 ${(report.customer.memberOf !== undefined) ? `${report.customer.memberOf.membershipNumber}` : '非会員'}
 ----------------------------
-座席予約
+予約イベント
 ----------------------------
 ${report.eventName}
 ${moment(report.eventStartDate).format('YYYY-MM-DD HH:mm')}-${moment(report.eventEndDate).format('HH:mm')}
 @${report.superEventLocation} ${report.eventLocation}
-${report.reservedTickets}
+----------------------------
+予約チケット
+----------------------------
+${report.reservedTickets.map((t) => `●${t}`).join('\n')}
 ----------------------------
 決済方法
 ----------------------------
-${report.paymentMethod[0]}
-${report.paymentMethodId[0]}
+${(report.paymentMethod[0] !== undefined) ? report.paymentMethod[0] : ''}
+${(report.paymentMethodId[0] !== undefined) ? report.paymentMethodId[0] : ''}
+${(report.paymentMethod[1] !== undefined) ? report.paymentMethod[1] : ''}
+${(report.paymentMethodId[1] !== undefined) ? report.paymentMethodId[1] : ''}
 ${report.price}
 ----------------------------
 割引
@@ -313,8 +319,9 @@ ${(report.discounts[0] !== undefined) ? report.discounts[0] : ''}
 ${(report.discountCodes[0] !== undefined) ? report.discountCodes[0] : ''}
 ￥${(report.discountPrices[0] !== undefined) ? report.discountPrices[0] : ''}
 `,
-    `----------------------------
-注文取引-${order.orderNumber}
+    `${order.orderNumber}
+----------------------------
+注文取引
 ----------------------------
 ${transaction.id}
 ${report.status}
@@ -407,7 +414,7 @@ async function pushExpiredTransactionDetails(userId: string, transactionId: stri
 
     // タスクの実行日時を調べる
     const taskStrs = tasks.map((task) => {
-        let taskNameStr = '???';
+        let taskNameStr: string = task.name;
         switch (task.name) {
             case kwskfs.factory.taskName.CancelCreditCard:
                 taskNameStr = 'クレカ取消';
