@@ -44,23 +44,19 @@ export async function searchTransactionById(userId: string, transactionId: strin
 }
 
 /**
- * 予約番号で取引を検索する
- * @export
+ * 注文番号で取引を検索する
  * @param userId LINEユーザーID
- * @param reserveNum 予約番号
- * @param theaterCode 劇場コード
+ * @param orderNumber 注文番号
  */
-export async function searchTransactionByReserveNum(userId: string, reserveNum: string, theaterCode: string) {
-    debug(userId, reserveNum);
-    await LINE.pushMessage(userId, '予約番号で検索しています...');
+export async function searchTransactionByOrderNumber(userId: string, orderNumber: string) {
+    debug(userId, orderNumber);
+    await LINE.pushMessage(userId, '注文番号で検索しています...');
 
     // 取引検索
     const transactionRepo = new kwskfs.repository.Transaction(kwskfs.mongoose.connection);
     await transactionRepo.transactionModel.findOne(
         {
-            // tslint:disable-next-line:no-magic-numbers
-            'result.order.orderInquiryKey.confirmationNumber': parseInt(reserveNum, 10),
-            'result.order.orderInquiryKey.theaterCode': theaterCode
+            'result.order.orderNumber': orderNumber
         },
         'result'
     ).exec().then(async (doc) => {
@@ -75,12 +71,10 @@ export async function searchTransactionByReserveNum(userId: string, reserveNum: 
 
 /**
  * 電話番号で取引を検索する
- * @export
  * @param userId LINEユーザーID
- * @param tel 電話番号
- * @param theaterCode 劇場コード
+ * @param tel 電話番号劇場コード
  */
-export async function searchTransactionByTel(userId: string, tel: string, __: string) {
+export async function searchTransactionByTel(userId: string, tel: string) {
     debug('tel:', tel);
     await LINE.pushMessage(userId, 'implementing...');
 }

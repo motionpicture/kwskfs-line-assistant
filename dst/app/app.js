@@ -22,7 +22,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // 静的ファイル
 // app.use(express.static(__dirname + '/../public'));
 // MongoDB接続
-kwskfs.mongoose.connect(process.env.MONGOLAB_URI, mongooseConnectionOptions_1.default).then(debug).catch(console.error);
+kwskfs.mongoose.connect(process.env.MONGOLAB_URI, mongooseConnectionOptions_1.default)
+    .then(() => { debug('MongoDB connected.'); }).catch(console.error);
 // routers
 const router_1 = require("./routes/router");
 const webhook_1 = require("./routes/webhook");

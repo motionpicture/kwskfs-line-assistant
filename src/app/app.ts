@@ -30,7 +30,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(express.static(__dirname + '/../public'));
 
 // MongoDB接続
-kwskfs.mongoose.connect(<string>process.env.MONGOLAB_URI, mongooseConnectionOptions).then(debug).catch(console.error);
+kwskfs.mongoose.connect(<string>process.env.MONGOLAB_URI, mongooseConnectionOptions)
+    .then(() => { debug('MongoDB connected.') }).catch(console.error);
 
 // routers
 import router from './routes/router';

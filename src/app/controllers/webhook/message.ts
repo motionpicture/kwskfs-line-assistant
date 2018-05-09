@@ -70,22 +70,18 @@ export async function pushHowToUse(userId: string) {
 export async function askTransactionInquiryKey(user: User) {
     // tslint:disable-next-line:no-multiline-string
     await LINE.pushMessage(user.userId, `次のいずれかを入力してください。
-1. [劇場コード]-[予約番号]
-例:118-2425
+1. 注文番号
+例:001-3949-123231-6998
 
 2. 取引ID
 例:5a7b2ed6c993250364388acd`);
 }
 
 /**
- * 予約番号or電話番号のボタンを送信する
- * @export
+ * 何で取引検索するかを質問する
  */
-export async function pushButtonsReserveNumOrTel(userId: string, message: string) {
+export async function askByWhichSearchTransaction(userId: string, message: string) {
     debug(userId, message);
-    const datas = message.split('-');
-    const theater = datas[0];
-    const reserveNumOrTel = datas[1];
 
     // キュー実行のボタン表示
     await request.post({
@@ -110,14 +106,14 @@ export async function pushButtonsReserveNumOrTel(userId: string, message: string
                             },
                             {
                                 type: 'postback',
-                                label: '予約番号',
-                                data: `action=searchTransactionByReserveNum&theater=${theater}&reserveNum=${reserveNumOrTel}`
-                            },
-                            {
-                                type: 'postback',
-                                label: '電話番号',
-                                data: `action=searchTransactionByTel&theater=${theater}&tel=${reserveNumOrTel}`
+                                label: '注文番号',
+                                data: `action=searchTransactionByOrderNumber&orderNumber=${message}`
                             }
+                            // {
+                            //     type: 'postback',
+                            //     label: '電話番号',
+                            //     data: `action=searchTransactionByTel&tel=${message}`
+                            // }
                         ]
                     }
                 }

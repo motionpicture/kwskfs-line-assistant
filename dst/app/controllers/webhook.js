@@ -38,9 +38,9 @@ function message(event, user) {
                         case /^取引照会$/.test(messageText):
                             yield MessageController.askTransactionInquiryKey(user);
                             break;
-                        // [劇場コード]-[予約番号 or 電話番号] or 取引IDで検索
+                        // 何で取引検索するか
                         case /^\d{3}-\d{1,12}|\w{24}$/.test(messageText):
-                            yield MessageController.pushButtonsReserveNumOrTel(userId, messageText);
+                            yield MessageController.askByWhichSearchTransaction(userId, messageText);
                             break;
                         // 取引csv要求
                         case /^csv$/.test(messageText):
@@ -100,15 +100,15 @@ function postback(event, user) {
         const userId = event.source.userId;
         try {
             switch (data.action) {
-                case 'searchTransactionByReserveNum':
-                    yield PostbackController.searchTransactionByReserveNum(userId, data.reserveNum, data.theater);
+                case 'searchTransactionByOrderNumber':
+                    yield PostbackController.searchTransactionByOrderNumber(userId, data.orderNumber);
                     break;
                 case 'searchTransactionById':
                     yield PostbackController.searchTransactionById(userId, data.transaction);
                     break;
-                case 'searchTransactionByTel':
-                    yield PostbackController.searchTransactionByTel(userId, data.tel, data.theater);
-                    break;
+                // case 'searchTransactionByTel':
+                //     await PostbackController.searchTransactionByTel(userId, <string>data.tel);
+                //     break;
                 case 'searchTransactionsByDate':
                     yield PostbackController.searchTransactionsByDate(userId, event.postback.params.date);
                     break;

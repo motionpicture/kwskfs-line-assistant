@@ -36,9 +36,9 @@ export async function message(event: LINE.IWebhookEvent, user: User) {
                         await MessageController.askTransactionInquiryKey(user);
                         break;
 
-                    // [劇場コード]-[予約番号 or 電話番号] or 取引IDで検索
+                    // 何で取引検索するか
                     case /^\d{3}-\d{1,12}|\w{24}$/.test(messageText):
-                        await MessageController.pushButtonsReserveNumOrTel(userId, messageText);
+                        await MessageController.askByWhichSearchTransaction(userId, messageText);
                         break;
 
                     // 取引csv要求
@@ -106,17 +106,17 @@ export async function postback(event: LINE.IWebhookEvent, user: User) {
 
     try {
         switch (data.action) {
-            case 'searchTransactionByReserveNum':
-                await PostbackController.searchTransactionByReserveNum(userId, <string>data.reserveNum, <string>data.theater);
+            case 'searchTransactionByOrderNumber':
+                await PostbackController.searchTransactionByOrderNumber(userId, <string>data.orderNumber);
                 break;
 
             case 'searchTransactionById':
                 await PostbackController.searchTransactionById(userId, <string>data.transaction);
                 break;
 
-            case 'searchTransactionByTel':
-                await PostbackController.searchTransactionByTel(userId, <string>data.tel, <string>data.theater);
-                break;
+            // case 'searchTransactionByTel':
+            //     await PostbackController.searchTransactionByTel(userId, <string>data.tel);
+            //     break;
 
             case 'searchTransactionsByDate':
                 await PostbackController.searchTransactionsByDate(userId, <string>event.postback.params.date);

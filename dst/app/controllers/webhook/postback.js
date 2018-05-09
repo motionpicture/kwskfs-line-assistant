@@ -47,22 +47,18 @@ function searchTransactionById(userId, transactionId) {
 }
 exports.searchTransactionById = searchTransactionById;
 /**
- * 予約番号で取引を検索する
- * @export
+ * 注文番号で取引を検索する
  * @param userId LINEユーザーID
- * @param reserveNum 予約番号
- * @param theaterCode 劇場コード
+ * @param orderNumber 注文番号
  */
-function searchTransactionByReserveNum(userId, reserveNum, theaterCode) {
+function searchTransactionByOrderNumber(userId, orderNumber) {
     return __awaiter(this, void 0, void 0, function* () {
-        debug(userId, reserveNum);
-        yield LINE.pushMessage(userId, '予約番号で検索しています...');
+        debug(userId, orderNumber);
+        yield LINE.pushMessage(userId, '注文番号で検索しています...');
         // 取引検索
         const transactionRepo = new kwskfs.repository.Transaction(kwskfs.mongoose.connection);
         yield transactionRepo.transactionModel.findOne({
-            // tslint:disable-next-line:no-magic-numbers
-            'result.order.orderInquiryKey.confirmationNumber': parseInt(reserveNum, 10),
-            'result.order.orderInquiryKey.theaterCode': theaterCode
+            'result.order.orderNumber': orderNumber
         }, 'result').exec().then((doc) => __awaiter(this, void 0, void 0, function* () {
             if (doc === null) {
                 yield LINE.pushMessage(userId, MESSAGE_TRANSACTION_NOT_FOUND);
@@ -74,15 +70,13 @@ function searchTransactionByReserveNum(userId, reserveNum, theaterCode) {
         }));
     });
 }
-exports.searchTransactionByReserveNum = searchTransactionByReserveNum;
+exports.searchTransactionByOrderNumber = searchTransactionByOrderNumber;
 /**
  * 電話番号で取引を検索する
- * @export
  * @param userId LINEユーザーID
- * @param tel 電話番号
- * @param theaterCode 劇場コード
+ * @param tel 電話番号劇場コード
  */
-function searchTransactionByTel(userId, tel, __) {
+function searchTransactionByTel(userId, tel) {
     return __awaiter(this, void 0, void 0, function* () {
         debug('tel:', tel);
         yield LINE.pushMessage(userId, 'implementing...');

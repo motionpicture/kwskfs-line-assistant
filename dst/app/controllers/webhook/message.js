@@ -77,8 +77,8 @@ function askTransactionInquiryKey(user) {
     return __awaiter(this, void 0, void 0, function* () {
         // tslint:disable-next-line:no-multiline-string
         yield LINE.pushMessage(user.userId, `次のいずれかを入力してください。
-1. [劇場コード]-[予約番号]
-例:118-2425
+1. 注文番号
+例:001-3949-123231-6998
 
 2. 取引ID
 例:5a7b2ed6c993250364388acd`);
@@ -86,15 +86,11 @@ function askTransactionInquiryKey(user) {
 }
 exports.askTransactionInquiryKey = askTransactionInquiryKey;
 /**
- * 予約番号or電話番号のボタンを送信する
- * @export
+ * 何で取引検索するかを質問する
  */
-function pushButtonsReserveNumOrTel(userId, message) {
+function askByWhichSearchTransaction(userId, message) {
     return __awaiter(this, void 0, void 0, function* () {
         debug(userId, message);
-        const datas = message.split('-');
-        const theater = datas[0];
-        const reserveNumOrTel = datas[1];
         // キュー実行のボタン表示
         yield request.post({
             simple: false,
@@ -118,14 +114,14 @@ function pushButtonsReserveNumOrTel(userId, message) {
                                 },
                                 {
                                     type: 'postback',
-                                    label: '予約番号',
-                                    data: `action=searchTransactionByReserveNum&theater=${theater}&reserveNum=${reserveNumOrTel}`
-                                },
-                                {
-                                    type: 'postback',
-                                    label: '電話番号',
-                                    data: `action=searchTransactionByTel&theater=${theater}&tel=${reserveNumOrTel}`
+                                    label: '注文番号',
+                                    data: `action=searchTransactionByOrderNumber&orderNumber=${message}`
                                 }
+                                // {
+                                //     type: 'postback',
+                                //     label: '電話番号',
+                                //     data: `action=searchTransactionByTel&tel=${message}`
+                                // }
                             ]
                         }
                     }
@@ -134,7 +130,7 @@ function pushButtonsReserveNumOrTel(userId, message) {
         }).promise();
     });
 }
-exports.pushButtonsReserveNumOrTel = pushButtonsReserveNumOrTel;
+exports.askByWhichSearchTransaction = askByWhichSearchTransaction;
 /**
  * 日付選択を求める
  * @export
