@@ -31,7 +31,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // MongoDB接続
 kwskfs.mongoose.connect(<string>process.env.MONGOLAB_URI, mongooseConnectionOptions)
-    .then(() => { debug('MongoDB connected.') }).catch(console.error);
+    .then(() => { debug('MongoDB connected.'); }).catch(console.error);
 
 // routers
 import router from './routes/router';
