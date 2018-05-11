@@ -1,0 +1,47 @@
+{
+    "extends": [
+        "tslint:latest",
+        "tslint-microsoft-contrib/recommended_ruleset"
+    ],
+    "jsRules": {},
+    "rules": {
+        "arrow-parens": [
+            true
+        ],
+        "arrow-return-shorthand": [
+            true
+        ],
+        "await-promise": [
+            true,
+            "Bluebird"
+        ],
+        "curly": true,
+        "export-name": false,
+        "import-name": false,
+        "interface-over-type-literal": true,
+        "linebreak-style": [
+            true,
+            "LF"
+        ],
+        "no-any": false,
+        "no-backbone-get-set-outside-model": false,
+        "no-default-export": false,
+        "no-internal-module": true,
+        "no-magic-numbers": true,
+        "no-misused-new": true,
+        "no-relative-imports": false,
+        "no-unnecessary-initializer": true,
+        "no-unsafe-any": false,
+        "prefer-function-over-method": true,
+        "prefer-method-signature": true,
+        "typedef": [
+            true,
+            "parameter",
+            "property-declaration",
+            "member-variable-declaration"
+        ]
+    },
+    "rulesDirectory": [
+        "node_modules/tslint-microsoft-contrib"
+    ]
+}
