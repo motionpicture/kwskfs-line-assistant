@@ -17,3 +17,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Fixed
 
 ### Security
+
+## v0.0.0 - 2018-05-11
+
+- sskts-line-assistantを引き継いでたたき台として実装。
