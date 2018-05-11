@@ -325,7 +325,8 @@ ${taskStrs}
                 data: `action=searchTransactionById&transaction=${transaction.id}`
             }
         ];
-        if (order.orderStatus === kwskfs.factory.orderStatus.OrderDelivered) {
+        if (order.orderStatus === kwskfs.factory.orderStatus.OrderDelivered ||
+            order.orderStatus === kwskfs.factory.orderStatus.OrderPickupAvailable) {
             // postActions.push({
             //     type: 'postback',
             //     label: 'メール送信',
