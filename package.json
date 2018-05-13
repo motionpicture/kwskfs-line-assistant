@@ -11,8 +11,8 @@
   "config": {},
   "dependencies": {
     "@motionpicture/express-middleware": "^0.1.0",
-    "@motionpicture/kwskfs-api-nodejs-client": "0.0.0-alpha.7",
-    "@motionpicture/kwskfs-domain": "0.0.0-alpha.27",
+    "@motionpicture/kwskfs-api-nodejs-client": "0.0.0-alpha.9",
+    "@motionpicture/kwskfs-domain": "0.0.0-alpha.32",
     "aws-sdk": "^2.234.1",
     "body-parser": "^1.18.2",
     "debug": "^3.1.0",
