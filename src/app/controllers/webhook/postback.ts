@@ -313,7 +313,7 @@ ${moment(report.eventStartDate).format('YYYY-MM-DD HH:mm')}-${moment(report.even
 ----------------------------
 予約チケット
 ----------------------------
-${report.reservedTickets.map((t) => `●${t.ticketToken} ${t.name} x${t.numItems} ${t.totalPrice}JPY`).join('\n')}
+${report.reservedTickets.map((t) => `●${t.ticketToken}\n${t.totalPrice} JPY\n${t.name} x${t.numItems}`).join('\n')}
 ----------------------------
 決済方法
 ----------------------------
