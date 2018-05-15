@@ -132,7 +132,10 @@ function pushTransactionDetails(userId, orderNumber) {
                 (offer.numMenuItems !== undefined) ? offer.numMenuItems :
                     '1', offer.reservationStatus, moment(info.ownedThrough).format('YYYY-MM-DD HH:mm:ss'));
         }).join('\n');
-        const report = kwskfs.service.transaction.placeOrder.transaction2report(transaction);
+        const report = kwskfs.service.transaction.placeOrder.transaction2report({
+            order: order,
+            transaction: transaction
+        });
         debug('report:', report);
         // 非同期タスク検索
         const tasks = yield taskRepo.taskModel.find({
@@ -374,7 +377,9 @@ function pushExpiredTransactionDetails(userId, transactionId) {
         const transactionRepo = new kwskfs.repository.Transaction(kwskfs.mongoose.connection);
         // 取引検索
         const transaction = yield transactionRepo.findById(kwskfs.factory.transactionType.PlaceOrder, transactionId);
-        const report = kwskfs.service.transaction.placeOrder.transaction2report(transaction);
+        const report = kwskfs.service.transaction.placeOrder.transaction2report({
+            transaction: transaction
+        });
         debug('report:', report);
         // 非同期タスク検索
         const tasks = yield taskRepo.taskModel.find({
@@ -595,10 +600,15 @@ function searchTransactionsByDate(userId, date) {
         const csv = yield kwskfs.service.transaction.placeOrder.download({
             startFrom: startFrom.toDate(),
             startThrough: startThrough.toDate()
-        }, 'csv')({ transaction: new kwskfs.repository.Transaction(kwskfs.mongoose.connection) });
+        }, 'csv')({
+            action: new kwskfs.repository.Action(kwskfs.mongoose.connection),
+            order: new kwskfs.repository.Order(kwskfs.mongoose.connection),
+            ownershipInfo: new kwskfs.repository.OwnershipInfo(kwskfs.mongoose.connection),
+            transaction: new kwskfs.repository.Transaction(kwskfs.mongoose.connection)
+        });
         yield LINE.pushMessage(userId, 'csvを作成しています...');
         const sasUrl = yield kwskfs.service.util.uploadFile({
-            fileName: `kwskfs-line-assistant-transactions-${moment().format('YYYYMMDDHHmmss')}.csv`,
+            fileName: `kwskfs-line-assistant-transactions-${date}.csv`,
             text: csv
         })();
         yield LINE.pushMessage(userId, `download -> ${sasUrl} `);

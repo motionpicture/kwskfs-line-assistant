@@ -179,7 +179,12 @@ function publishURI4transactionsCSV(userId, dateFrom, dateThrough) {
         const csv = yield kwskfs.service.transaction.placeOrder.download({
             startFrom: startFrom.toDate(),
             startThrough: startThrough.toDate()
-        }, 'csv')({ transaction: new kwskfs.repository.Transaction(kwskfs.mongoose.connection) });
+        }, 'csv')({
+            action: new kwskfs.repository.Action(kwskfs.mongoose.connection),
+            order: new kwskfs.repository.Order(kwskfs.mongoose.connection),
+            ownershipInfo: new kwskfs.repository.OwnershipInfo(kwskfs.mongoose.connection),
+            transaction: new kwskfs.repository.Transaction(kwskfs.mongoose.connection)
+        });
         yield LINE.pushMessage(userId, 'csvを作成しています...');
         const sasUrl = yield kwskfs.service.util.uploadFile({
             fileName: `kwskfs-line-assistant-transactions-${moment().format('YYYYMMDDHHmmss')}.csv`,

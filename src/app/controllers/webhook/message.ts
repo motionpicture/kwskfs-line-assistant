@@ -176,7 +176,12 @@ export async function publishURI4transactionsCSV(userId: string, dateFrom: strin
             startThrough: startThrough.toDate()
         },
         'csv'
-    )({ transaction: new kwskfs.repository.Transaction(kwskfs.mongoose.connection) });
+    )({
+        action: new kwskfs.repository.Action(kwskfs.mongoose.connection),
+        order: new kwskfs.repository.Order(kwskfs.mongoose.connection),
+        ownershipInfo: new kwskfs.repository.OwnershipInfo(kwskfs.mongoose.connection),
+        transaction: new kwskfs.repository.Transaction(kwskfs.mongoose.connection)
+    });
 
     await LINE.pushMessage(userId, 'csvを作成しています...');
 
