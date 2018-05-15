@@ -147,7 +147,10 @@ async function pushTransactionDetails(userId: string, orderNumber: string) {
         }
     ).join('\n');
 
-    const report = kwskfs.service.transaction.placeOrder.transaction2report(transaction);
+    const report = kwskfs.service.transaction.placeOrder.transaction2report({
+        order: order,
+        transaction: transaction
+    });
     debug('report:', report);
 
     // 非同期タスク検索
@@ -415,7 +418,9 @@ async function pushExpiredTransactionDetails(userId: string, transactionId: stri
 
     // 取引検索
     const transaction = await transactionRepo.findById(kwskfs.factory.transactionType.PlaceOrder, transactionId);
-    const report = kwskfs.service.transaction.placeOrder.transaction2report(transaction);
+    const report = kwskfs.service.transaction.placeOrder.transaction2report({
+        transaction: transaction
+    });
     debug('report:', report);
 
     // 非同期タスク検索
@@ -671,12 +676,17 @@ export async function searchTransactionsByDate(userId: string, date: string) {
             startThrough: startThrough.toDate()
         },
         'csv'
-    )({ transaction: new kwskfs.repository.Transaction(kwskfs.mongoose.connection) });
+    )({
+        action: new kwskfs.repository.Action(kwskfs.mongoose.connection),
+        order: new kwskfs.repository.Order(kwskfs.mongoose.connection),
+        ownershipInfo: new kwskfs.repository.OwnershipInfo(kwskfs.mongoose.connection),
+        transaction: new kwskfs.repository.Transaction(kwskfs.mongoose.connection)
+    });
 
     await LINE.pushMessage(userId, 'csvを作成しています...');
 
     const sasUrl = await kwskfs.service.util.uploadFile({
-        fileName: `kwskfs-line-assistant-transactions-${moment().format('YYYYMMDDHHmmss')}.csv`,
+        fileName: `kwskfs-line-assistant-transactions-${date}.csv`,
         text: csv
     })();
 
